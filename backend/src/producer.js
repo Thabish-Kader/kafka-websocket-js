@@ -19,7 +19,7 @@ const producerRun = async () => {
   rl.prompt();
 
   rl.on("line", async (line) => {
-    const [data, name, partition] = line.split(" ");
+    const [name, value, partition] = line.split(" ");
 
     await producer.send({
       topic: "thabishs-topic",
@@ -27,7 +27,7 @@ const producerRun = async () => {
       messages: [
         {
           partition: parseInt(partition),
-          value: JSON.stringify({ data, name }),
+          value: JSON.stringify({ name, value }),
         },
       ],
     });

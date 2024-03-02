@@ -10,14 +10,14 @@ const consumerRun = async (groupId, topics, wss1, wss2) => {
       case 0:
         wss1.clients.forEach((client) => {
           if (client.readyState === 1) {
-            client.send(JSON.stringify(message.value.toString()));
+            client.send(message.value.toString());
           }
         });
         break;
       case 1:
         wss2.clients.forEach((client) => {
           if (client.readyState === 1) {
-            client.send(JSON.stringify(message.value.toString()));
+            client.send(message.value.toString());
           }
         });
         break;

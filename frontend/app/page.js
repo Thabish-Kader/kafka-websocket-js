@@ -1,50 +1,41 @@
 "use client";
 import { AreaLineChartCanvas } from "@/components/AreaLineChartCanvas";
-import { useEffect, useState } from "react";
+import { useWs } from "@/utils/hooks/useWs";
+import { useEffect, useState, useMemo } from "react";
 
 export default function Home() {
-  const [data, setData] = useState([]);
+  const [ws1Data, setWs1Data] = useState([]);
+  const [ws2Data, setWs2Data] = useState([]);
+  const [isWs1Ready, ws1Value] = useWs("ws://localhost:8080");
+  const [isWs2Ready, ws2Value] = useWs("ws://localhost:8081");
 
   useEffect(() => {
-    const ws1 = new WebSocket("ws://localhost:8080");
-    const ws2 = new WebSocket("ws://localhost:8081");
-    ws1.addEventListener("open", () => {
-      console.log("Client 1 connected");
-    });
+    if (isWs1Ready) {
+      console.log("client 1 connected");
+      if (ws1Value) {
+        const { name, value } = JSON.parse(ws1Value);
+        setWs1Data((prev) => [...prev, { name, value: parseInt(value) }]);
+      }
+    }
+  }, [isWs1Ready, ws1Value]);
 
-    ws1.addEventListener("message", (event) => {
-      console.log("Message from server (Client 1): ", event.data);
-    });
+  useEffect(() => {
+    if (isWs2Ready) {
+      console.log("client 2 connected");
+      if (ws2Value) {
+        const { name, value } = JSON.parse(ws2Value);
+        setWs2Data((prev) => [...prev, { name, value: parseInt(value) }]);
+      }
+    }
+  }, [isWs2Ready, ws2Value]);
 
-    ws1.addEventListener("error", (error) => {
-      console.error("WebSocket error (Client 1):", error);
-    });
-
-    ws2.addEventListener("open", () => {
-      console.log("Client 2 connected");
-    });
-
-    ws2.addEventListener("message", (event) => {
-      console.log("Message from server (Client 2): ", event.data);
-    });
-
-    ws2.addEventListener("error", (error) => {
-      console.error("WebSocket error (Client 2):", error);
-    });
-
-    // Cleanup function
-    return () => {
-      ws1.close();
-      console.log("Client 1 disconnected");
-
-      ws2.close();
-      console.log("Client 2 disconnected");
-    };
-  }, []);
+  console.log({ ws1Data });
+  console.log({ ws2Data });
 
   return (
-    <div className="h-screen w-screen p-4">
-      <AreaLineChartCanvas />
+    <div className="h-screen w-screen p-4 flex items-center justify-center gap-5">
+      <AreaLineChartCanvas data={ws1Data} color={"red"} />
+      <AreaLineChartCanvas data={ws2Data} color={"green"} />
     </div>
   );
 }
