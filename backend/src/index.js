@@ -9,7 +9,8 @@ const PORT = 8000;
 const init = async () => {
   await adminInit();
   await startWebSocketServers();
-  await consumerRun("realtime-data", ["thabishs-topic"], wss1, wss2);
+  await consumerRun("realtime-data", ["thabishs-topic"], wss1);
+  await consumerRun("realtime-data", ["thabishs-topic"], wss2);
 };
 
 app.listen(PORT, async () => {

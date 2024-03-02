@@ -1,7 +1,7 @@
 "use client";
 import { AreaLineChartCanvas } from "@/components/AreaLineChartCanvas";
 import { useWs } from "@/utils/hooks/useWs";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [ws1Data, setWs1Data] = useState([]);
