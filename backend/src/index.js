@@ -14,6 +14,6 @@ const init = async () => {
 };
 
 app.listen(PORT, async () => {
-  console.log(`Listiening to port ----> ${PORT}`);
+  console.log(`Listening to port ----> ${PORT}`);
   init();
 });
